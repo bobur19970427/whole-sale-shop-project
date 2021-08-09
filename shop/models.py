@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
@@ -86,7 +87,7 @@ class Employes(models.Model):
 class Customers(models.Model):
     username = models.CharField(max_length=250)
     lastname = models.CharField(max_length=250)
-    phone = models.IntegerField(default='')
+    phone = models.CharField(max_length=10)
 
     class Meta:
         ordering = ('username',)
@@ -98,7 +99,7 @@ class Customers(models.Model):
 
 
 class Order(models.Model):
-    customer = models.ForeignKey(Customers, on_delete=models.CASCADE)
+    customer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     employe = models.ForeignKey(Employes, on_delete=models.CASCADE)
     order_date = models.DateTimeField(auto_now=True)
     shipping_date = models.DateTimeField(auto_now=True)
@@ -106,4 +107,4 @@ class Order(models.Model):
     shipping_adress = models.TextField()
 
     def __str__(self):
-        return self.customer
+        return self.customer.username
