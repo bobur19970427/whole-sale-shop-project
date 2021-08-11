@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-
+from phonenumber_field.modelfields import PhoneNumberField
 # Create your models here.
 
 class Category(models.Model):
@@ -42,12 +42,13 @@ class Products(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField('Izoh qoldiring')
     GENDER_CHOICES = [
+        ('general' , 'Umumiy'),
         ('man' , 'Erkak'),
         ('woman', 'Ayol'),
         ('children', 'Bolalar'),
 
     ]
-    gender = models.CharField(max_length=200, choices=GENDER_CHOICES, default='man')
+    gender = models.CharField(max_length=200, choices=GENDER_CHOICES, default='general')
     image = models.ImageField(upload_to='products/')
     sub_category = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=0)
@@ -71,9 +72,9 @@ class Products(models.Model):
 class Employes(models.Model):
     name = models.CharField(max_length=250)
     last_name = models.CharField(max_length=250)
-    phone = models.IntegerField(default='')
+    phone = PhoneNumberField()
     adress = models.TextField()
-    home_phone = models.IntegerField()
+    home_phone = PhoneNumberField()
 
     class Meta:
         ordering = ('name',)
@@ -81,7 +82,7 @@ class Employes(models.Model):
         verbose_name_plural = 'Employes'
 
     def __str__(self):
-        return self.name
+        return self.name#,self.last_name,self.phone,self.adress,self.home_phone
 
 
 class Customers(models.Model):
